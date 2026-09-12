@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+
+# Raw dataset (too large for git)
+data/raw/
+
+# Model checkpoints
+saved_models/*.pt
+
+# OS / IDE
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Generated Reports and Artifacts
+submission/
