@@ -56,39 +56,37 @@ This will:
 
 ---
 
-## 4. Model Training
+## 4. Official Phase 2 Reproducibility Pipeline
 
-Each model can be trained independently using the unified training pipeline:
+The authoritative workflow for generating the final Phase 2 interim report results is the unified `phase2.py` script. 
 
-### Train the LSTM
+To run the complete experiment (data split, training all 3 models, baseline calculations, metrics generation, and plotting):
 ```powershell
-python src/train.py --model lstm --epochs 15 --batch_size 64 --lr 0.001
+python src/phase2.py --epochs 15 --batch-size 64
 ```
 
-### Train the MLP Baseline
-```powershell
-python src/train.py --model mlp --epochs 15 --batch_size 64 --lr 0.001
-```
+This will automatically output all artifacts to the `submission/phase2/` directory, including:
+- `results/model_comparison.csv`: The complete metrics table (MAE, RMSE, MAPE, R2) for MLP, CNN, LSTM, and baselines.
+- `results/horizon_mae.csv`: Error degradation over the 24h horizon.
+- `images/`: The final benchmark plots and learning curves.
 
-### Train the 1D-CNN
-```powershell
-python src/train.py --model cnn1d --epochs 15 --batch_size 64 --lr 0.001
-```
-
-*Notes on Training:*
-- Chronological train/validation/test split (70% / 15% / 15%) is enforced.
-- Early stopping monitors validation loss to prevent overfitting.
-- Metrics are calculated after inverse-scaling back to real kilowatt (kW) units.
+**Note:** For convenience, the final generated metrics and plots have been copied to the tracked `plots/` directory in this repository. 
 
 ---
 
-## 5. Model Comparison & Final Evaluation
+## 5. (Optional) Modular Training & Evaluation
 
-After training the models, run the common evaluation module:
+If you wish to train models individually or debug them, you can still use the original modular pipeline.
+
+### Train Models Individually
+```powershell
+python src/train.py --model lstm --epochs 15 --batch_size 64 --lr 0.001
+python src/train.py --model mlp --epochs 15 --batch_size 64 --lr 0.001
+python src/train.py --model cnn1d --epochs 15 --batch_size 64 --lr 0.001
+```
+
+### Manual Comparison
+After individual training, you can generate basic comparisons using:
 ```powershell
 python src/compare_all.py
 ```
-This produces:
-1. **Summary Metrics Table**: Formatted side-by-side comparison of MAE, RMSE, MAPE, and $R^2$.
-2. **`plots/forecast_comparison_24h.png`**: Overlaid 24-hour predictions against ground truth.
-3. **`plots/horizon_mae_error.png`**: Plot showing error degradation from step +1 to +24.
