@@ -1,0 +1,104 @@
+[
+  {
+    "paper": "Gasparin et al., 2019 [1]",
+    "method": "Feedforward, recurrent, seq2seq and TCN comparison",
+    "dataset": "UCI household; GEFCom2014 load",
+    "result": "Gated RNNs handle irregular household load better than simple RNNs; rankings depend on aggregation.",
+    "relevance": "Closest task match; motivates identical splits and architecture comparison. Their sampling differs from ours.",
+    "reference": "A. Gasparin, S. Lukovic, and C. Alippi, \"Deep Learning for Time Series Forecasting: The Electric Load Case,\" arXiv:1907.09207, 2019.",
+    "url": "https://arxiv.org/abs/1907.09207"
+  },
+  {
+    "paper": "Lara-Benitez et al., 2020 [2]",
+    "method": "Dilated causal TCN versus LSTM",
+    "dataset": "Electric demand and electric-vehicle demand",
+    "result": "TCNs generally achieve better forecasting accuracy and less hyperparameter sensitivity in the reported experiments.",
+    "relevance": "Motivates the convolutional family. Our pooled CNN is simpler than their dilated TCN.",
+    "reference": "P. Lara-Benitez, M. Carranza-Garcia, J. M. Luna-Romera, and J. C. Riquelme, \"Temporal Convolutional Networks Applied to Energy-Related Time Series Forecasting,\" Applied Sciences, vol. 10, no. 7, art. 2322, 2020.",
+    "url": "https://doi.org/10.3390/app10072322"
+  },
+  {
+    "paper": "Casolaro et al., 2023 [3]",
+    "method": "Review of deep forecasting architectures",
+    "dataset": "Multiple benchmark families; survey",
+    "result": "Identifies uncertainty, overfitting, data requirements and distribution changes as open problems.",
+    "relevance": "Frames limitations of a single-house, single-seed comparison; no directly comparable experiment.",
+    "reference": "A. Casolaro, V. Capone, G. Iannuzzo, and F. Camastra, \"Deep Learning for Time Series Forecasting: Advances and Open Problems,\" Information, vol. 14, no. 11, art. 598, 2023.",
+    "url": "https://doi.org/10.3390/info14110598"
+  },
+  {
+    "paper": "Al-Ali et al., 2023 [4]",
+    "method": "Seasonal clustering and CNN-LSTM-Transformer",
+    "dataset": "Fingrid solar-production data",
+    "result": "Reports improved forecasting versus tested alternatives, with a complex training procedure.",
+    "relevance": "Possible hybrid extension; solar generation differs from household consumption and results cannot be transferred.",
+    "reference": "E. M. Al-Ali et al., \"Solar Energy Production Forecasting Based on a Hybrid CNN-LSTM-Transformer Model,\" Mathematics, vol. 11, no. 3, art. 676, 2023.",
+    "url": "https://doi.org/10.3390/math11030676"
+  },
+  {
+    "paper": "Bai et al., 2018 [5]",
+    "method": "Generic TCN versus recurrent networks",
+    "dataset": "Sequence-modeling benchmark suite",
+    "result": "Convolutional networks outperform canonical recurrent networks on diverse tasks and show longer effective memory.",
+    "relevance": "Supports testing CNNs without assuming LSTM superiority; benchmark tasks differ from our load task.",
+    "reference": "S. Bai, J. Z. Kolter, and V. Koltun, \"An Empirical Evaluation of Generic Convolutional and Recurrent Networks for Sequence Modeling,\" arXiv:1803.01271, 2018.",
+    "url": "https://arxiv.org/abs/1803.01271"
+  },
+  {
+    "paper": "Oreshkin et al., 2020 [6]",
+    "method": "N-BEATS: residual fully connected blocks",
+    "dataset": "M3, M4 and Tourism",
+    "result": "Strong forecasting with fully connected layers; interpretable and generic variants outperform evaluated benchmarks.",
+    "relevance": "Justifies retaining an MLP baseline. Our plain MLP does not implement N-BEATS residual decomposition.",
+    "reference": "B. N. Oreshkin, D. Carpov, N. Chapados, and Y. Bengio, \"N-BEATS: Neural basis expansion analysis for interpretable time series forecasting,\" ICLR, 2020.",
+    "url": "https://arxiv.org/abs/1905.10437"
+  },
+  {
+    "paper": "Zhou et al., 2021 [7]",
+    "method": "Informer: ProbSparse attention and distillation",
+    "dataset": "ETT, electricity consumption and weather",
+    "result": "Reduces attention cost to O(L log L) and reports improved long-sequence forecasting.",
+    "relevance": "Attention extension for longer contexts; its long-horizon benchmarks differ from this 24-hour setting.",
+    "reference": "H. Zhou et al., \"Informer: Beyond Efficient Transformer for Long Sequence Time-Series Forecasting,\" AAAI, 2021.",
+    "url": "https://arxiv.org/abs/2012.07436"
+  },
+  {
+    "paper": "Wu et al., 2021 [8]",
+    "method": "Autoformer: decomposition and auto-correlation",
+    "dataset": "Six benchmarks spanning energy, traffic, weather and other domains",
+    "result": "Reports improved long-term forecasting by learning periodic subseries dependencies.",
+    "relevance": "Motivates explicit seasonal baselines and future decomposition experiments; no direct household score comparison.",
+    "reference": "H. Wu, J. Xu, J. Wang, and M. Long, \"Autoformer: Decomposition Transformers with Auto-Correlation for Long-Term Series Forecasting,\" NeurIPS, 2021.",
+    "url": "https://arxiv.org/abs/2106.13008"
+  },
+  {
+    "paper": "Zeng et al., 2022 [9]",
+    "method": "LTSF-Linear and decomposition-linear baselines",
+    "dataset": "Nine real-world forecasting benchmarks",
+    "result": "Simple linear models outperform the tested Transformer alternatives under the paper's protocol.",
+    "relevance": "Counters complexity-only model choice; supports persistence controls and cautious performance claims.",
+    "reference": "A. Zeng, M. Chen, L. Zhang, and Q. Xu, \"Are Transformers Effective for Time Series Forecasting?\" arXiv:2205.13504, 2022.",
+    "url": "https://arxiv.org/abs/2205.13504"
+  },
+  {
+    "paper": "Nie et al., 2023 [10]",
+    "method": "PatchTST: patching and channel-independent attention",
+    "dataset": "Multivariate long-term benchmarks, including electricity and weather",
+    "result": "Patching reduces attention memory and improves forecasting versus evaluated Transformer models.",
+    "relevance": "A possible fourth family for later work, requiring separate tuning; not implemented or claimed in this study.",
+    "reference": "Y. Nie, N. H. Nguyen, P. Sinthong, and J. Kalagnanam, \"A Time Series is Worth 64 Words: Long-term Forecasting with Transformers,\" ICLR, 2023.",
+    "url": "https://arxiv.org/abs/2211.14730"
+  },
+  {
+    "reference": "G. Hebrail and A. Berard, Individual Household Electric Power Consumption, UCI Machine Learning Repository, 2012, doi: 10.24432/C58K54.",
+    "url": "https://doi.org/10.24432/C58K54"
+  },
+  {
+    "reference": "S. Hochreiter and J. Schmidhuber, Long Short-Term Memory, Neural Computation, vol. 9, no. 8, pp. 1735-1780, 1997.",
+    "url": "https://doi.org/10.1162/neco.1997.9.8.1735"
+  },
+  {
+    "reference": "D. P. Kingma and J. Ba, Adam: A Method for Stochastic Optimization, ICLR, 2015.",
+    "url": "https://arxiv.org/abs/1412.6980"
+  }
+]

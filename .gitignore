@@ -8,9 +8,10 @@ env/
 
 # Raw dataset (too large for git)
 data/raw/
+data/processed/
 
-# Model checkpoints
-saved_models/*.pt
+# Local model outputs
+saved_models/
 
 # OS / IDE
 .vscode/
@@ -20,5 +21,22 @@ Thumbs.db
 
 # Generated Reports and Artifacts
 submission/
-
 Context/
+deliverables/
+plots/
+results/final/
+artifacts/
+tmp/
+
+# Local reference and report-authoring files
+agents.md
+project.md
+requirements-report.txt
+notebooks/01_walkthrough.ipynb
+scripts/build_report.py
+scripts/build_final_report.py
+scripts/build_final_slides.py
+scripts/report_content.py
+scripts/collect_results.py
+scripts/plot_final.py
+src/compare_all.py

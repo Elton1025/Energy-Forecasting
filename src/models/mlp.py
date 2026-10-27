@@ -30,7 +30,7 @@ class MLPForecaster(nn.Module):
 
     def forward(self, x):
         # x shape: (batch_size, seq_len, num_features)
-        x_flat = x.view(x.size(0), -1)
+        x_flat = x.reshape(x.size(0), -1)
         return self.network(x_flat)
 
 if __name__ == "__main__":

@@ -1,0 +1,33 @@
+{
+  "notebook_url": "https://www.kaggle.com/code/eltonlewis/household-power-forecasting-final-comparison",
+  "owner": "eltonlewis",
+  "kernel_id": 141103396,
+  "version": 2,
+  "status": "COMPLETE",
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "tests_passed": 8,
+  "execution": "Kaggle GPU; no local model training",
+  "test_period_previously_inspected": true,
+  "note": "Version 1 completed training but failed the inference demonstration. Version 2 fixes noncontiguous MLP input handling and passes the complete workflow. Local notebook cell IDs were subsequently added without changing executable code.",
+  "source_sha256": {
+    "src/__init__.py": "4b751bd069442a953f1501272aee539f945307a485e97592a2e3711171128f5f",
+    "src/compare_all.py": "ba501bc998862d97221c88927f4267061d652f2d8a7a8f801b88b16201fdffbb",
+    "src/data_loader.py": "b93c37943d129397324845c1fbe55750d6cab45e3033b047245365cf197365f6",
+    "src/download_and_preprocess.py": "3c41fcef46098952a5479b214604a7daa5d38d8bb15423fcf76cb213c62ec2e1",
+    "src/evaluate.py": "f85af620b03120cd85c0955f01cb95d78ecdcfc45b760bbac2293871be0ba001",
+    "src/models/cnn1d.py": "1f6199a076b45658783f48ed5a400e2bdd917cdf9e02b958e708faeec99a945c",
+    "src/models/lstm.py": "51bf15247f6970d1c4ebfe9848c23c540d0363b64403d81aef74bca2f83e9b83",
+    "src/models/mlp.py": "5f047de81abc1786a0d2cee799b7aa68fd66278c908158f21f44d6e9d1e15af4",
+    "src/phase2.py": "c84e1828b6188adfe8a1686b0ab4d24344d6dcf29e32390ef323fa441fa40bcf",
+    "src/predict.py": "e97f87cc42d3659c1f71565b4c880c002c5a9b4a063e93a877a1aae9c99f1315",
+    "src/train.py": "fd5d5bd8bf9cec0491db7ded46fa68c30dd520c611740729f79a3c568ff8eb19",
+    "tests/test_phase2.py": "2130096065ad06a1f279f8b33932ce2c7381a01c70ff0260465ee1fcf9c22fee",
+    "tests/test_predict.py": "5539276dbb6f1b063291ff8e7480ddc6408a1b9bd030562efc3e91d0f12f1b53"
+  },
+  "verified_metrics_from_predictions": true,
+  "source_hash_encoding": "UTF-8 with LF line endings, matching embedded notebook sources"
+}

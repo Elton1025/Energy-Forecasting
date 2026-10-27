@@ -1,0 +1,11 @@
+{
+  "best_neural_by_test_mae": "LSTM",
+  "worst_sample_index": 3715,
+  "worst_sample_start": "2010-10-18 04:00:00",
+  "worst_sample_mae_kw": 1.1586003303527832,
+  "train_90th_percentile_kw": 2.3881833333333335,
+  "peak_target_count": 5051,
+  "peak_mae_kw": 1.4056432247161865,
+  "nonpeak_mae_kw": 0.37514007091522217,
+  "note": "Overlapping forecast windows are not independent. This file describes one seed; use all_runs.csv for repeated-run analysis."
+}

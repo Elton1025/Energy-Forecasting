@@ -1,5 +1,6 @@
 """Reproducible Phase 2 experiment; preserves original saved artifacts."""
 import argparse
+import os
 import hashlib
 import json
 import random
@@ -63,6 +64,13 @@ class Windows(Dataset):
     def __init__(self, x, y, observed, input_len=168, output_len=24):
         self.x = np.asarray(x, dtype=np.float32)
         self.y = np.asarray(y, dtype=np.float32).reshape(-1)
+        observed = np.asarray(observed, dtype=bool)
+        if input_len < 1 or output_len < 1:
+            raise ValueError('Window lengths must be positive')
+        if self.x.ndim != 2 or len(self.x) != len(self.y) or observed.shape != self.y.shape:
+            raise ValueError('Features, targets and observation mask must have matching rows')
+        if not np.isfinite(self.x).all() or not np.isfinite(self.y).all():
+            raise ValueError('Window data must be finite')
         self.input_len, self.output_len = input_len, output_len
         self.starts = np.array([i for i in range(len(x)-input_len-output_len+1)
                                 if observed[i+input_len:i+input_len+output_len].all()], dtype=int)
@@ -98,15 +106,15 @@ def inverse(a, scaler):
 def train_model(name, loaders, scaler, args, models, images):
     random.seed(args.seed); np.random.seed(args.seed); torch.manual_seed(args.seed)
     loaders[0].generator.manual_seed(args.seed)
-    model = get_model(name, 14, 168, 24)
+    model = get_model(name, 14, 168, 24).to(args.device)
     opt = torch.optim.Adam(model.parameters(), lr=args.lr)
     loss = torch.nn.MSELoss()
     best, stale, records = float('inf'), 0, []
     start = time.perf_counter()
     for epoch in range(1, args.epochs+1):
         t = time.perf_counter()
-        tr = train_epoch(model, loaders[0], loss, opt, 'cpu')
-        va = evaluate_epoch(model, loaders[1], loss, 'cpu')
+        tr = train_epoch(model, loaders[0], loss, opt, args.device)
+        va = evaluate_epoch(model, loaders[1], loss, args.device)
         records.append({'epoch':epoch, 'train_mse_scaled':tr, 'validation_mse_scaled':va, 'seconds':time.perf_counter()-t})
         print(f'{name} epoch {epoch}: train={tr:.6f} val={va:.6f} time={records[-1]["seconds"]:.1f}s', flush=True)
         if va < best:
@@ -118,7 +126,7 @@ def train_model(name, loaders, scaler, args, models, images):
         if stale >= args.patience: break
     elapsed = time.perf_counter()-start
     model.load_state_dict(torch.load(models/f'best_{name}.pt', weights_only=True, map_location='cpu'))
-    p, y = predict_all(model, loaders[2], 'cpu')
+    p, y = predict_all(model, loaders[2], args.device)
     p, y = inverse(p, scaler), inverse(y, scaler)
     np.save(models/f'preds_{name}.npy', p); np.save(models/'trues_test.npy', y)
     plt.figure(figsize=(7, 3.3))
@@ -140,15 +148,21 @@ def main():
     ap.add_argument('--lr', type=float, default=.001)
     ap.add_argument('--seed', type=int, default=42)
     ap.add_argument('--threads', type=int, default=4)
+    ap.add_argument('--device', choices=['auto', 'cpu', 'cuda'], default='auto')
     ap.add_argument('--output', type=Path, default=ROOT/'submission/phase2')
     args = ap.parse_args()
     if min(args.epochs, args.batch_size, args.patience, args.threads) < 1: ap.error('Positive counts required')
+    if not np.isfinite(args.lr) or args.lr <= 0: ap.error('Learning rate must be finite and positive')
+    if args.device == 'auto': args.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    if args.device == 'cuda' and not torch.cuda.is_available(): ap.error('CUDA is unavailable')
+    os.environ.setdefault('CUBLAS_WORKSPACE_CONFIG', ':4096:8')
+    torch.backends.cudnn.benchmark = False
     torch.set_num_threads(args.threads); torch.use_deterministic_algorithms(True)
     out = args.output.resolve()
     results, images, models = [out/p for p in ['results','images','models']]
     for p in [results,images,models]: p.mkdir(parents=True, exist_ok=True)
     write_json(results/'run_config.json', {**vars(args), 'torch_version':torch.__version__, 'numpy_version':np.__version__,
-               'pandas_version':pd.__version__, 'python':sys.version, 'device':'cpu', 'input_hours':168,
+               'pandas_version':pd.__version__, 'python':sys.version, 'device':args.device, 'input_hours':168,
                'forecast_hours':24, 'created_at':pd.Timestamp.now().isoformat()})
     df, audit = prepare(results)
     ds, loaders, fs, ts, info = split_data(df, args.batch_size, args.seed)
@@ -182,7 +196,7 @@ def main():
                'train_90th_percentile_kw':threshold,'peak_target_count':int(peak.sum()),
                'peak_mae_kw':float(np.abs(y-predictions[best_name])[peak].mean()),
                'nonpeak_mae_kw':float(np.abs(y-predictions[best_name])[~peak].mean()),
-               'note':'Overlapping forecast windows are not independent. Single-seed preliminary results.'})
+               'note':'Overlapping forecast windows are not independent. This file describes one seed; use all_runs.csv for repeated-run analysis.'})
     write_json(results/'completion.json',{'complete':True,'models':list(predictions),'test_windows':len(y)})
     print(pd.DataFrame(rows).to_string(index=False),flush=True)
 
